@@ -91,10 +91,6 @@ def open_menu():
             close_app(root)
             break  # Exit the loop
 
-# def close_app(root):
-#     """Properly close the application."""
-#     print("Closing the application...")
-#     root.destroy()  # Close the Tkinter app
 
 if __name__ == "__main__":
     open_menu()
