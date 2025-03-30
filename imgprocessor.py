@@ -47,41 +47,54 @@ def change_extension(image_path):
         img.save(save_path)
         messagebox.showinfo("Success", f"Image saved as {save_path}")
 
+def close_app(root):
+    """Properly close the application."""
+    print("Closing the application...")
+    root.quit()  # Stop the main loop
+    root.destroy() 
+
 def open_menu():
     """
     Display a menu for the user to choose an image operation.
     """
     root = tk.Tk()
     root.withdraw()  # Hide the main window
-    
+
+    root.title("Image Editor Menu")
+    root.geometry("300x150")  # Set window size
+
+    #handle window close button properly
+    root.protocol("WM_DELETE_WINDOW", lambda:close_app(root))
+
     while True:
         # Display menu options
-        choice = simpledialog.askinteger("Menu", "1: Resize Image\n2: Change Image Extension\n3: Exit", minvalue=1, maxvalue=3)
+        choice = simpledialog.askinteger("Menu", "1: Resize Image\n2: Change Image Extension\n3: Exit", minvalue=1, maxvalue=3, parent=root)
         
         if choice == 1:
-            # User selects an image
-            file_path = filedialog.askopenfilename(title="Select an image")
+            file_path = filedialog.askopenfilename(title="Select an image", parent=root)
             if file_path:
-                # Ask for new dimensions
-                new_width = simpledialog.askinteger("Width", "Enter the width in pixels:")
-                new_height = simpledialog.askinteger("Height", "Enter the height in pixels:")
+                new_width = simpledialog.askinteger("Width", "Enter the width in pixels:", parent=root)
+                new_height = simpledialog.askinteger("Height", "Enter the height in pixels:", parent=root)
                 
                 if new_width and new_height:
-                    # Ask where to save the resized image
-                    save_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG", "*.jpg"), ("PNG", "*.png"), ("BMP", "*.bmp")], title="Save Image As")
+                    save_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG", "*.jpg"), ("PNG", "*.png"), ("BMP", "*.bmp")], title="Save Image As", parent=root)
                     
                     if save_path:
                         adjust_resolution(file_path, save_path, new_width=new_width, new_height=new_height, new_dpi=300)
         
         elif choice == 2:
-            # User selects an image to change its extension
-            file_path = filedialog.askopenfilename(title="Select an image")
+            file_path = filedialog.askopenfilename(title="Select an image", parent=root)
             if file_path:
                 change_extension(file_path)
         
         elif choice == 3:
-            # Exit the program
-            break
+            close_app(root)
+            break  # Exit the loop
+
+# def close_app(root):
+#     """Properly close the application."""
+#     print("Closing the application...")
+#     root.destroy()  # Close the Tkinter app
 
 if __name__ == "__main__":
     open_menu()
